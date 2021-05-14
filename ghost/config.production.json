@@ -1,5 +1,5 @@
 {
-    "url": "http://yourdomain",
+    "url": "http://localhost.com",
     "server": {
         "port": 2368,
         "host": "0.0.0.0"
@@ -9,14 +9,14 @@
         "connection": {
             "host": "mysql",
             "port": 3306,
-            "user": "",
-            "password": "",
+            "user": "tam",
+            "password": "tam123",
             "database": "ghostdata",
             "charset": "utf8mb4"
         }
     },
     "mail": {
-        "from": "'Custom Name' <myemail@address.com>", 
+        "from": "'Custom Name' <ttamng0905@gmail.com>",
         "transport": "SMTP",
         "logger": true,
         "options": {

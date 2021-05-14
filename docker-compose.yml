@@ -1,46 +1,62 @@
+#version: '3'
+#
+#services:
+#  nginx:
+#    image: nginx:latest
+#    container_name: nginx
+#    hostname: ghost-nginx
+#    ports:
+#      - 443:443
+#    volumes:
+#      - ./nginx/ssl/yourhost.xyz.key:/etc/nginx/yourhost.xyz.key:ro
+#      - ./nginx/ssl/yourhost.xyz.crt:/etc/nginx/yourhost.xyz.crt:ro
+#      - ./nginx/conf/ghost.conf:/etc/nginx/conf.d/ghost.conf:z
+#    links:
+#      - ghost
+#    restart: always
+#
+#  ghost:
+#    image: ghost:latest
+#    container_name: ghost
+#    hostname: ghost
+#    volumes:
+#      - $PWD/ghost/volumes/config.production.json:/var/lib/ghost/config.production.json:z #overwrite default settings
+#      - ./ghost/content:/var/lib/ghost/content:z
+#    expose:
+#    - "3306"
+#    environment: # this section can be commented to start in dev mode by default
+#      - NODE_ENV=production # set either production or development, then it will load the respective config
+#    restart: always
+#    links:
+#      - mysql
+#
+#  mysql:
+#    image: mysql:latest
+#    container_name: mysql
+#    volumes:
+#       - ./dbdata:/var/lib/mysql:z  # Persist storage
+#    expose:
+#      - "3306"
+#    environment:
+#      # Beware of special characters in password that can be interpreted by shell
+#      - MYSQL_ROOT_PASSWORD=tamat123 #specify your root pass
+#      - MYSQL_DATABASE=ghostdata
+#      - MYSQL_USER=tam
+#      - MYSQL_PASSWORD=tamat123 #please change this
+#    restart: always
+#
+##https://github.com/robincher/docker-compose-ghost-quickstart:
+
+
 version: '3'
-
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    hostname: ghost-nginx
-    ports:
-      - 443:443
-    volumes:
-      - ./nginx/ssl/yourhost.xyz.key:/etc/nginx/yourhost.xyz.key:ro
-      - ./nginx/ssl/yourhost.xyz.crt:/etc/nginx/yourhost.xyz.crt:ro
-      - ./nginx/conf/ghost.conf:/etc/nginx/conf.d/ghost.conf:z
-    links:
-      - ghost
-    restart: always
-
   ghost:
-    image: ghost:latest
-    container_name: ghost
-    hostname: ghost
-    volumes:
-      - $PWD/ghost/volumes/config.production.json:/var/lib/ghost/config.production.json:z #overwrite default settings 
-      - ./ghost/content:/var/lib/ghost/content:z
-    expose:
-    - "3306"
-    environment: # this section can be commented to start in dev mode by default
-      - NODE_ENV=production # set either production or development, then it will load the respective config
+    image: najarramsada/ghost-on-github
+    container_name: ghost #name your container for easy identification.
     restart: always
-    links:
-      - mysql
-
-  mysql:
-    image: mysql:latest
-    container_name: mysql
+    ports:
+      - 8880:2368 #Ghost is running on 2368, map a custom port to your host server.
     volumes:
-       - ./dbdata:/var/lib/mysql:z  # Persist storage
-    expose:
-      - "3306"
-    environment:
-      # Beware of special characters in password that can be interpreted by shell
-      - MYSQL_ROOT_PASSWORD= #specify your root pass
-      - MYSQL_DATABASE=ghostdata
-      - MYSQL_USER=ghostusr
-      - MYSQL_PASSWORD= xyx #please change this
-    restart: always
+      - ghost:/home/node/.ghost/content #Always a good idea to have a volume for persistent data. If not used, each time you start the container a new instance of blog will be deployed
+volumes:
+  ghost:
